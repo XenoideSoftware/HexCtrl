@@ -338,7 +338,8 @@ namespace HEXCTRL::LISTEX::GDIUT {
 		auto SetTextColor(COLORREF clr)const -> COLORREF { return ::SetTextColor(m_hDC, clr); }
 		auto SetViewportOrg(int iX, int iY)const -> POINT { POINT pt; ::SetViewportOrgEx(m_hDC, iX, iY, &pt); return pt; }
 		auto SelectObject(HGDIOBJ hObj)const -> HGDIOBJ { return ::SelectObject(m_hDC, hObj); }
-		int StartDocW(const DOCINFO* pDI)const { return ::StartDocW(m_hDC, pDI); }
+		int StartDocW(const DOCINFOW* pDI)const { return ::StartDocW(m_hDC, pDI); }
+		int StartDocA(const DOCINFOA* pDI)const { return ::StartDocA(m_hDC, pDI); }
 		int StartPage()const { return ::StartPage(m_hDC); }
 		void TextOutW(int iX, int iY, LPCWSTR pwszText, int iSize)const { ::TextOutW(m_hDC, iX, iY, pwszText, iSize); }
 		void TextOutW(int iX, int iY, std::wstring_view wsv)const {
@@ -2837,7 +2838,7 @@ auto CListEx::OnPaint()->LRESULT
 auto CListEx::OnSetCursor(const MSG& msg)->LRESULT
 {
 	if (m_fHandCursor) {
-		static const auto hCurHand = static_cast<HCURSOR>(::LoadImageW(nullptr, IDC_HAND, IMAGE_CURSOR, 0, 0,
+		static const auto hCurHand = static_cast<HCURSOR>(::LoadImage(nullptr, IDC_HAND, IMAGE_CURSOR, 0, 0,
 			LR_DEFAULTSIZE | LR_SHARED));
 		::SetCursor(hCurHand);
 		return TRUE;

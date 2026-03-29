@@ -1238,7 +1238,7 @@ namespace HEXCTRL::INTERNAL::GDIUT { //Windows GDI related stuff.
 		bool LoadMenuW(HINSTANCE hInst, LPCWSTR pwszName) { m_hMenu = ::LoadMenuW(hInst, pwszName); return IsMenu(); }
 		bool LoadMenuW(HINSTANCE hInst, UINT uMenuID) { return LoadMenuW(hInst, MAKEINTRESOURCEW(uMenuID)); }
 		void SetItemBitmap(UINT uItem, HBITMAP hBmp, bool fByID = true)const {
-			const MENUITEMINFOW mii { .cbSize { sizeof(MENUITEMINFOW) }, .fMask { MIIM_BITMAP }, .hbmpItem { hBmp } };
+			const MENUITEMINFO mii { .cbSize { sizeof(MENUITEMINFO) }, .fMask { MIIM_BITMAP }, .hbmpItem { hBmp } };
 			SetItemInfo(uItem, &mii, fByID);
 		}
 		void SetItemBitmapCheck(UINT uItem, HBITMAP hBmp, bool fByID = true)const {
@@ -1249,21 +1249,24 @@ namespace HEXCTRL::INTERNAL::GDIUT { //Windows GDI related stuff.
 				(fByID ? MF_BYCOMMAND : MF_BYPOSITION));
 		}
 		void SetItemData(UINT uItem, ULONG_PTR dwData, bool fByID = true)const {
-			const MENUITEMINFOW mii { .cbSize { sizeof(MENUITEMINFOW) }, .fMask { MIIM_DATA }, .dwItemData { dwData } };
+			const MENUITEMINFO mii { .cbSize { sizeof(MENUITEMINFO) }, .fMask { MIIM_DATA }, .dwItemData { dwData } };
 			SetItemInfo(uItem, &mii, fByID);
 		}
 		void SetItemInfo(UINT uItem, LPCMENUITEMINFO pMII, bool fByID = true)const {
-			assert(IsMenu()); ::SetMenuItemInfoW(m_hMenu, uItem, !fByID, pMII);
+			assert(IsMenu()); ::SetMenuItemInfo(m_hMenu, uItem, !fByID, pMII);
 		}
 		void SetItemType(UINT uItem, UINT uType, bool fByID = true)const {
-			const MENUITEMINFOW mii { .cbSize { sizeof(MENUITEMINFOW) }, .fMask { MIIM_FTYPE }, .fType { uType } };
+			const MENUITEMINFO mii { .cbSize { sizeof(MENUITEMINFO) }, .fMask { MIIM_FTYPE }, .fType { uType } };
 			SetItemInfo(uItem, &mii, fByID);
 		}
+		/*
 		void SetItemWstr(UINT uItem, const std::wstring& wstr, bool fByID = true)const {
 			const MENUITEMINFOW mii { .cbSize { sizeof(MENUITEMINFOW) }, .fMask { MIIM_STRING },
 				.dwTypeData { const_cast<LPWSTR>(wstr.data()) } };
+
 			SetItemInfo(uItem, &mii, fByID);
 		}
+		*/
 		BOOL TrackPopupMenu(int iX, int iY, HWND hWndOwner, UINT uFlags = TPM_LEFTALIGN | TPM_TOPALIGN | TPM_LEFTBUTTON)const {
 			assert(IsMenu()); return ::TrackPopupMenuEx(m_hMenu, uFlags, iX, iY, hWndOwner, nullptr);
 		}
